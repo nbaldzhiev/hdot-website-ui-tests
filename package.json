@@ -1,0 +1,20 @@
+{
+  "name": "hdot-website-ui-tests",
+  "version": "1.0.0",
+  "description": "UI Tests for the HDOT website",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nbaldzhiev/hdot-website-ui-tests.git"
+  },
+  "author": "nenko.baldzhiev@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nbaldzhiev/hdot-website-ui-tests/issues"
+  },
+  "homepage": "https://github.com/nbaldzhiev/hdot-website-ui-tests#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.33.0"
+  }
+}
