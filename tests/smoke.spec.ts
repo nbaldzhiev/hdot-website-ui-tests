@@ -18,4 +18,13 @@ test.describe('Smoke', () => {
         await appUI.mapPage.assertThat.hdotAssetsByTypeWidgetIsVisible();
     })
 
+    test.only('Should be able to toggle Facilities and Structure layer', async ({ appUI }) => {
+        test.setTimeout(45000);
+
+        await appUI.homePage.openMapViaTopSectionExploreMapBtn();
+        await appUI.mapPage.assertThat.mapIsVisible();
+        await appUI.mapPage.moreLayersConfig.toggleFacilitiesAndStructures();
+        await appUI.mapPage.hdotAssetsConfig.unselectAll();
+    })
+
 });

@@ -1,6 +1,87 @@
 /** This module contains a page object model for the Map page */
 import { Page, Locator, expect } from '@playwright/test';
 
+class MoreLayersConfig {
+    readonly page: Page;
+    readonly btn: Locator;
+    readonly popup: Locator;
+    readonly facilitiesAndStructuresToggle: Locator;
+
+    constructor(page: Page) {
+        this.page = page;
+        this.btn = page.getByText('More Layers');
+        this.popup = page.locator('.MuiPopover-paper');
+        this.facilitiesAndStructuresToggle = this.popup.locator(
+            '.MuiGrid-direction-xs-column + div > div:first-child > li:first-child span.MuiIconButton-root'
+        );
+    }
+
+    async expand() {
+        await this.page.keyboard.press('Escape');
+        await expect(this.popup).toBeHidden();
+        // use one of the toggles as means to verify popup is visible or not
+        await this.facilitiesAndStructuresToggle.isVisible().then(async (state) => {
+            if (!state) {
+                await this.btn.click();
+            }
+        })
+        await expect(this.facilitiesAndStructuresToggle).toBeVisible();
+    }
+
+    async toggleFacilitiesAndStructures(on: boolean = true) {
+        await this.expand();
+        const classVal = await this.facilitiesAndStructuresToggle.getAttribute('class');
+        if (on && !classVal?.includes('Mui-checked')) {
+            await this.facilitiesAndStructuresToggle.click();
+            await expect(this.facilitiesAndStructuresToggle).toHaveClass(/Mui-checked/)
+        } else if (!on && classVal?.includes('Mui-checked')) {
+            await this.facilitiesAndStructuresToggle.click();
+            await expect(this.facilitiesAndStructuresToggle).not.toHaveClass(/Mui-checked/)
+        }
+        await this.page.waitForLoadState('networkidle');
+    }
+
+}
+
+class HDOTAssetsConfig {
+    readonly page: Page;
+    readonly popup: Locator;
+    readonly btn: Locator;
+    readonly unselectAllBtn: Locator;
+    readonly selectedMsg: Locator;
+
+    constructor(page: Page) {
+        this.page = page;
+        this.btn = page.locator('button[aria-controls="simple-menu"] span', { hasText: 'HDOT Assets' });
+        this.popup = page.locator('.MuiPopover-paper');
+        this.unselectAllBtn = this.popup.locator('button.MuiButton-disableElevation');
+        this.selectedMsg = this.popup.locator('button.MuiButton-disableElevation + p');
+    }
+
+    async expand() {
+        await this.page.keyboard.press('Escape');
+        await expect(this.popup).toBeHidden();
+        // use the Unselect all button as means to verify popup is visible or not
+        await this.unselectAllBtn.isVisible().then(async (state) => {
+            if (!state) {
+                await this.btn.click();
+            }
+        })
+        await expect(this.unselectAllBtn).toBeVisible();
+    }
+
+    async unselectAll() {
+        await this.page.waitForLoadState('networkidle');
+        await this.expand();
+        const classVal = await this.unselectAllBtn.getAttribute('class');
+        if (!classVal?.includes('Mui-disabled')) {
+            await this.unselectAllBtn.click();
+        }
+        await expect(this.unselectAllBtn).toHaveClass(/Mui-disabled/);
+        await expect(this.selectedMsg).toContainText(/0 selected/)
+    }
+}
+
 class HDOTAssetsByTypeWidget {
     readonly title: Locator;
     readonly bridgeType: Locator;
@@ -40,11 +121,15 @@ export class MapPage {
     readonly page: Page;
     readonly mapArea: Locator;
     readonly sidebar: MapPageSideBar;
+    readonly moreLayersConfig: MoreLayersConfig;
+    readonly hdotAssetsConfig: HDOTAssetsConfig;
 
     constructor(page: Page) {
         this.page = page;
         this.mapArea = page.locator('canvas[aria-label="Map"]');
         this.sidebar = new MapPageSideBar(page);
+        this.moreLayersConfig = new MoreLayersConfig(page);
+        this.hdotAssetsConfig = new HDOTAssetsConfig(page);
     }
 
     /**
@@ -66,6 +151,7 @@ class MapPageAssertions {
     /** Asserts that the map is visible */
     async mapIsVisible() {
         await expect(this.mapPage.mapArea).toBeVisible();
+        await this.mapPage.page.waitForLoadState('networkidle');
     }
 
     /** Asserts that the HDOT Assets By Type widget in the sidebar is visible */
