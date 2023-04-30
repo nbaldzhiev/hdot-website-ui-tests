@@ -1,6 +1,7 @@
 import { test } from "./fixture-test";
 
 test.describe('Smoke', () => {
+    test.setTimeout(60000);
 
     test('Should be able to open the Map page from the Home page', async ({ appUI }) => {
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
@@ -18,9 +19,7 @@ test.describe('Smoke', () => {
         await appUI.mapPage.assertThat.hdotAssetsByTypeWidgetIsVisible();
     })
 
-    test.only('Should be able to toggle Facilities and Structure layer', async ({ appUI }) => {
-        test.setTimeout(60000);
-
+    test('Should be able to toggle Facilities and Structure layer', async ({ appUI }) => {
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
         await appUI.mapPage.assertThat.mapIsVisible();
         await appUI.mapPage.moreLayersConfig.toggleFacilitiesAndStructures();
