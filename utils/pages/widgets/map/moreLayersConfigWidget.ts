@@ -1,3 +1,6 @@
+/** 
+ * This module contains an abstraction of the More Layers widget present on the map page 
+ */
 import { Page, Locator, expect } from "@playwright/test";
 
 export class MoreLayersConfig {
@@ -15,6 +18,7 @@ export class MoreLayersConfig {
         );
     }
 
+    /** Expands the menu by clicking on the More Layers button */
     async expand() {
         await this.page.keyboard.press('Escape');
         await expect(this.popup).toBeHidden();
@@ -27,6 +31,10 @@ export class MoreLayersConfig {
         await expect(this.facilitiesAndStructuresToggle).toBeVisible();
     }
 
+    /**
+     * Toggles the Facilities and Structures option of the menu
+     * @param {boolean} on Whether to toggle on or off the option
+     */
     async toggleFacilitiesAndStructures(on: boolean = true) {
         await this.expand();
         const classVal = await this.facilitiesAndStructuresToggle.getAttribute('class');

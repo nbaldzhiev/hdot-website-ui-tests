@@ -11,6 +11,9 @@ export class MapPage {
     readonly sidebar: MapPageSideBar;
     readonly moreLayersConfig: MoreLayersConfig;
     readonly hdotAssetsConfig: HDOTAssetsConfig;
+    readonly zoomOutBtn: Locator;
+    readonly zoomInBtn: Locator;
+    readonly zoomLevel: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -18,6 +21,25 @@ export class MapPage {
         this.sidebar = new MapPageSideBar(page);
         this.moreLayersConfig = new MoreLayersConfig(page);
         this.hdotAssetsConfig = new HDOTAssetsConfig(page);
+        this.zoomOutBtn = page.locator('button[aria-label="Decrease zoom"]');
+        this.zoomInBtn = page.locator('button[aria-label="Increase zoom"]');
+        this.zoomLevel = page.locator('.MuiBox-root .MuiTypography-displayBlock');
+    }
+
+    async zoomIn() {
+        await this.zoomLevel.textContent().then(async (val) => {
+            const levelAsInt = parseInt(val!);
+            await this.zoomInBtn.click();
+            await expect(this.zoomLevel).toHaveText((levelAsInt + 1).toString())
+        })
+    }
+
+    async zoomOut() {
+        await this.zoomLevel.textContent().then(async (val) => {
+            const levelAsInt = parseInt(val!);
+            await this.zoomOutBtn.click();
+            await expect(this.zoomLevel).toHaveText((levelAsInt - 1).toString())
+        })
     }
 
     /**
@@ -75,5 +97,13 @@ class MapPageAssertions {
                 expect(parseInt(val!)).toBeGreaterThan(1);
             })
         }
+    }
+
+    /**
+     * Asserts that the zoom level within the zoom widget is correct
+     * @param {number} zoomLevel Expected zoom level
+     */
+    async zoomLevelIsCorrect(zoomLevel: number) {
+        await expect(this.mapPage.zoomLevel).toHaveText(zoomLevel.toString());
     }
 }

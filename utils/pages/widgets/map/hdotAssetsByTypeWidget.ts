@@ -1,4 +1,8 @@
-import { Page, Locator, expect } from "@playwright/test";
+/** 
+ * This module contains an abstraction of the HDOT Assets By Type widget part of the side bar on the map page 
+ * when the HDOT Projects category is selected
+ */
+import { Page, Locator } from "@playwright/test";
 
 export class HDOTAssetsByTypeWidget {
     readonly title: Locator;

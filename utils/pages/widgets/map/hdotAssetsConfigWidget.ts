@@ -1,3 +1,6 @@
+/** 
+ * This module contains an abstraction of the HDOT Assets widget present on the map page 
+ */
 import { Page, Locator, expect } from "@playwright/test";
 
 export class HDOTAssetsConfig {
@@ -15,6 +18,7 @@ export class HDOTAssetsConfig {
         this.selectedMsg = this.popup.locator('button.MuiButton-disableElevation + p');
     }
 
+    /** Expands the menu by clicking on the HDOT Assets button */
     async expand() {
         await this.page.keyboard.press('Escape');
         await expect(this.popup).toBeHidden();
@@ -27,6 +31,7 @@ export class HDOTAssetsConfig {
         await expect(this.unselectAllBtn).toBeVisible();
     }
 
+    /** Clicks on the Unselect All button in the expanded menu */
     async unselectAll() {
         await this.page.waitForLoadState('networkidle');
         await this.expand();

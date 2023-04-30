@@ -1,3 +1,4 @@
+/** This module contains an abstraction of the sidebar on the map page */
 import { Page, Locator, expect } from "@playwright/test";
 import { HDOTAssetsByTypeWidget } from "./hdotAssetsByTypeWidget";
 import { CategoriesVerticalBar } from "./categoriesVerticalBar";
@@ -26,6 +27,12 @@ export class MapPageSideBar {
         this.hdotAssetsByTypeWidget = new HDOTAssetsByTypeWidget(page);
         this.categoriesVerticalBar = new CategoriesVerticalBar(page);
         this.facilitiesAndStructuresWidget = new ThematicIndicesFacilitiesAndStructuresWidget(page);
+    }
+
+    async clickLogo() {
+        await this.logo.click();
+        await expect(this.informationTab).toBeHidden();
+        await expect(this.page).toHaveURL(/#back-to-top-anchor/);
     }
 
     async goToInformationTab() {
