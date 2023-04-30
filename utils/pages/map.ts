@@ -1,6 +1,47 @@
 /** This module contains a page object model for the Map page */
 import { Page, Locator, expect } from '@playwright/test';
 
+class ThematicIndicesFacilitiesAndStructuresWidget {
+    readonly page: Page;
+    readonly selectedMsg: Locator;
+    readonly preSchoolType: Locator;
+    readonly fireStationType: Locator;
+    readonly policeStationType: Locator;
+
+    constructor(page: Page) {
+        this.page = page;
+        let parent = 'section[aria-label="Facilities and Structures"]';
+        this.selectedMsg = page.locator(`${parent} span.MuiTypography-caption`);
+        this.preSchoolType = page.locator(`${parent} div.MuiGrid-item > div.MuiGrid-spacing-xs-1:first-child`);
+        this.fireStationType = page.locator(`${parent} div.MuiGrid-item > div.MuiGrid-spacing-xs-1:nth-child(2)`);
+        this.policeStationType = page.locator(`${parent} div.MuiGrid-item > div.MuiGrid-spacing-xs-1:last-child`);
+    }
+
+    async selectPreSchoolType() {
+        await this.preSchoolType.click();
+        await expect(this.selectedMsg).toContainText('1 selected');
+    }
+}
+
+class CategoriesVerticalBar {
+    readonly page: Page;
+    readonly thematicIndicesBtn: Locator;
+
+    constructor(page: Page) {
+        this.page = page;
+        this.thematicIndicesBtn = page.locator('a[aria-label="Thematic Indices"]');
+    }
+
+    async openThematicIndices() {
+        await this.page.keyboard.press('Escape');
+        const classVal = await this.thematicIndicesBtn.getAttribute('class');
+        if (!classVal?.includes('Mui-selected')) {
+            this.thematicIndicesBtn.click();
+        }
+        await expect(this.thematicIndicesBtn).toHaveClass(/Mui-selected/);
+    }
+}
+
 class MoreLayersConfig {
     readonly page: Page;
     readonly btn: Locator;
@@ -104,15 +145,42 @@ class MapPageSideBar {
 
     readonly page: Page;
     readonly logo: Locator;
+    readonly informationTab: Locator;
+    readonly insightsTab: Locator;
     readonly title: Locator;
     readonly textParagraphs: Locator;
     readonly hdotAssetsByTypeWidget: HDOTAssetsByTypeWidget;
+    readonly categoriesVerticalBar: CategoriesVerticalBar;
+    readonly facilitiesAndStructuresWidget: ThematicIndicesFacilitiesAndStructuresWidget;
 
     constructor(page: Page) {
+        this.page = page;
         this.logo = page.locator(`${this.parentSelector} header svg`);
+        this.informationTab = page.locator(`${this.parentSelector} a[aria-label="Information"]`);
+        this.insightsTab = page.locator(`${this.parentSelector} a[aria-label="Insights"]`);
         this.title = page.locator(`${this.parentSelector} h4.MuiTypography-root`);
         this.textParagraphs = page.locator(`${this.parentSelector} p.MuiTypography-paragraph`);
         this.hdotAssetsByTypeWidget = new HDOTAssetsByTypeWidget(page);
+        this.categoriesVerticalBar = new CategoriesVerticalBar(page);
+        this.facilitiesAndStructuresWidget = new ThematicIndicesFacilitiesAndStructuresWidget(page);
+    }
+
+    async goToInformationTab() {
+        await this.page.keyboard.press('Escape');
+        const classVal = await this.informationTab.getAttribute('class');
+        if (!classVal?.includes('Mui-selected')) {
+            this.informationTab.click();
+        }
+        await expect(this.informationTab).toHaveClass(/Mui-selected/);
+    }
+
+    async goToInsightsTab() {
+        await this.page.keyboard.press('Escape');
+        const classVal = await this.insightsTab.getAttribute('class');
+        if (!classVal?.includes('Mui-selected')) {
+            this.insightsTab.click();
+        }
+        await expect(this.insightsTab).toHaveClass(/Mui-selected/);
     }
 }
 
@@ -175,5 +243,17 @@ class MapPageAssertions {
      */
     async paragraphTextContains({ paragraphIndex, text }: { paragraphIndex: number, text: string }) {
         await expect(this.mapPage.sidebar.textParagraphs.nth(paragraphIndex - 1)).toContainText(text);
+    }
+
+    /** Asserts that the Thematic Indices Facilities and Structures widget on the Insights sidebar tab is visible */
+    async facilitiesAndStructuresWidgetIsVisibleWithValues() {
+        const widget = this.mapPage.sidebar.facilitiesAndStructuresWidget;
+        // TODO: What if some of the types doesn't have entries, should it be displayed in the widget?
+        for (const el of [widget.preSchoolType, widget.fireStationType, widget.policeStationType]) {
+            await expect(el).toBeVisible();
+            el.locator('span:not(class)').textContent().then((val) => {
+                expect(parseInt(val!)).toBeGreaterThan(1);
+            })
+        }
     }
 }

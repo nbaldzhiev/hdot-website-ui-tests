@@ -19,12 +19,16 @@ test.describe('Smoke', () => {
     })
 
     test.only('Should be able to toggle Facilities and Structure layer', async ({ appUI }) => {
-        test.setTimeout(45000);
+        test.setTimeout(60000);
 
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
         await appUI.mapPage.assertThat.mapIsVisible();
         await appUI.mapPage.moreLayersConfig.toggleFacilitiesAndStructures();
         await appUI.mapPage.hdotAssetsConfig.unselectAll();
+        await appUI.mapPage.sidebar.categoriesVerticalBar.openThematicIndices();
+        await appUI.mapPage.sidebar.goToInsightsTab();
+        await appUI.mapPage.assertThat.facilitiesAndStructuresWidgetIsVisibleWithValues();
+        await appUI.mapPage.sidebar.facilitiesAndStructuresWidget.selectPreSchoolType();
     })
 
 });
