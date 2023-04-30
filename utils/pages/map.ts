@@ -61,16 +61,6 @@ class MapPageAssertions {
     /** Asserts that the map is visible */
     async mapIsVisible() {
         await expect(this.mapPage.mapArea).toBeVisible();
-        await this.mapPage.page.waitForLoadState('networkidle');
-    }
-
-    /** Asserts that the HDOT Assets By Type widget in the sidebar is visible */
-    async hdotAssetsByTypeWidgetIsVisible() {
-        const widget = this.mapPage.sidebar.hdotAssetsByTypeWidget;
-        // TODO: What if some of the types doesn't have entries, should it be displayed in the widget?
-        for (const el of [widget.bridgeType, widget.culvertType, widget.roadwayType, widget.tunnelType, widget.title]) {
-            await expect(el).toBeVisible();
-        }
     }
 
     /** Asserts that the title of the section in the sidebar is the expected one

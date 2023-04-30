@@ -45,6 +45,5 @@ export class MoreLayersConfig {
             await this.facilitiesAndStructuresToggle.click();
             await expect(this.facilitiesAndStructuresToggle).not.toHaveClass(/Mui-checked/);
         }
-        await this.page.waitForLoadState('networkidle');
     }
 }

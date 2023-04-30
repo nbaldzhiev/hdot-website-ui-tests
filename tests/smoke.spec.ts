@@ -1,4 +1,4 @@
-import { test } from './fixture-test';
+import { test, expect } from './fixture-test';
 
 test.describe('Smoke', () => {
     // Increasing the global test timeout due to the map loading slowly
@@ -15,12 +15,14 @@ test.describe('Smoke', () => {
         ]) {
             await appUI.mapPage.assertThat.paragraphTextContains({ paragraphIndex: p.index, text: p.text });
         }
-        await appUI.mapPage.assertThat.hdotAssetsByTypeWidgetIsVisible();
+        await appUI.mapPage.sidebar.hdotAssetsByTypeWidget.waitUntilTypesHaveLoaded();
     });
 
     test('Should be able to toggle Facilities and Structure layer', async ({ appUI }) => {
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
         await appUI.mapPage.assertThat.mapIsVisible();
+        await appUI.mapPage.assertThat.titleSectionIsCorrect('Introduction');
+        await appUI.mapPage.sidebar.hdotAssetsByTypeWidget.waitUntilTypesHaveLoaded();
         await appUI.mapPage.moreLayersConfig.toggleFacilitiesAndStructures();
         await appUI.mapPage.hdotAssetsConfig.unselectAll();
         await appUI.mapPage.sidebar.categoriesVerticalBar.openThematicIndices();
@@ -54,6 +56,7 @@ test.describe('Smoke', () => {
         await appUI.homePage.assertThat.allNavBarItemsAreVisible();
 
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
+        await appUI.mapPage.assertThat.mapIsVisible();
         await appUI.mapPage.zoomIn();
         await appUI.mapPage.zoomOut();
     });

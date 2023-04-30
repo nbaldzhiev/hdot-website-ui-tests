@@ -33,7 +33,6 @@ export class HDOTAssetsConfig {
 
     /** Clicks on the Unselect All button in the expanded menu */
     async unselectAll() {
-        await this.page.waitForLoadState('networkidle');
         await this.expand();
         const classVal = await this.unselectAllBtn.getAttribute('class');
         if (!classVal?.includes('Mui-disabled')) {

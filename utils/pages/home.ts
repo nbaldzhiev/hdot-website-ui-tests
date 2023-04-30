@@ -98,6 +98,7 @@ export class HomePage {
     async openMapViaTopSectionExploreMapBtn() {
         await this.topSectionExploreMapBtn.click();
         await expect(this.topSectionExploreMapBtn).toBeHidden();
+        await expect(this.page).toHaveURL(/\/map\/information\/info/);
     }
 
     /**
