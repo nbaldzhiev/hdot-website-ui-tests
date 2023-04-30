@@ -17,7 +17,7 @@ class HomePageNavBar {
     constructor(page: Page) {
         this.page = page;
         this.logo = page.locator(`${this.parentSelector} svg`);
-        let buttonSelector = `${this.parentSelector} .MuiTabs-flexContainer > a[role="tab"]`;
+        const buttonSelector = `${this.parentSelector} .MuiTabs-flexContainer > a[role="tab"]`;
         this.climateResilienceBtn = page.locator(`${buttonSelector}:first-child`);
         this.actionPlanBtn = page.locator(`${buttonSelector}:nth-child(2)`);
         this.climateStressorBtn = page.locator(`${buttonSelector}:nth-child(3)`);
@@ -116,7 +116,7 @@ class HomePageAssertions {
         this.homePage = page;
     }
 
-    /** Asserts that all elements in the header nav bar are visible */ 
+    /** Asserts that all elements in the header nav bar are visible */
     async allNavBarItemsAreVisible() {
         const navBar = this.homePage.navBar;
         for (const el of [
@@ -131,5 +131,4 @@ class HomePageAssertions {
             await expect(el).toBeVisible();
         }
     }
-
 }

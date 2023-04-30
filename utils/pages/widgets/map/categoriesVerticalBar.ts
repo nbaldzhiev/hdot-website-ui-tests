@@ -1,5 +1,5 @@
 /** This module contains an abstraction of the categories vertical bar widget part of the side bar on the map page */
-import { Page, Locator, expect } from "@playwright/test";
+import { Page, Locator, expect } from '@playwright/test';
 
 export class CategoriesVerticalBar {
     readonly page: Page;

@@ -1,7 +1,7 @@
-/** 
- * This module contains an abstraction of the HDOT Assets widget present on the map page 
+/**
+ * This module contains an abstraction of the HDOT Assets widget present on the map page
  */
-import { Page, Locator, expect } from "@playwright/test";
+import { Page, Locator, expect } from '@playwright/test';
 
 export class HDOTAssetsConfig {
     readonly page: Page;
@@ -27,7 +27,7 @@ export class HDOTAssetsConfig {
             if (!state) {
                 await this.btn.click();
             }
-        })
+        });
         await expect(this.unselectAllBtn).toBeVisible();
     }
 
@@ -40,6 +40,6 @@ export class HDOTAssetsConfig {
             await this.unselectAllBtn.click();
         }
         await expect(this.unselectAllBtn).toHaveClass(/Mui-disabled/);
-        await expect(this.selectedMsg).toContainText(/0 selected/)
+        await expect(this.selectedMsg).toContainText(/0 selected/);
     }
 }

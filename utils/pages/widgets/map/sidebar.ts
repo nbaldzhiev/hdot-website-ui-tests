@@ -1,8 +1,8 @@
 /** This module contains an abstraction of the sidebar on the map page */
-import { Page, Locator, expect } from "@playwright/test";
-import { HDOTAssetsByTypeWidget } from "./hdotAssetsByTypeWidget";
-import { CategoriesVerticalBar } from "./categoriesVerticalBar";
-import { ThematicIndicesFacilitiesAndStructuresWidget } from "./facilitiesAndStructuresWidget";
+import { Page, Locator, expect } from '@playwright/test';
+import { HDOTAssetsByTypeWidget } from './hdotAssetsByTypeWidget';
+import { CategoriesVerticalBar } from './categoriesVerticalBar';
+import { ThematicIndicesFacilitiesAndStructuresWidget } from './facilitiesAndStructuresWidget';
 
 export class MapPageSideBar {
     readonly parentSelector: string = '.MuiGrid-grid-xs-true > .MuiBox-root > div:first-child';

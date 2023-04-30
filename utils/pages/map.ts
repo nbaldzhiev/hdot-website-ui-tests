@@ -30,16 +30,16 @@ export class MapPage {
         await this.zoomLevel.textContent().then(async (val) => {
             const levelAsInt = parseInt(val!);
             await this.zoomInBtn.click();
-            await expect(this.zoomLevel).toHaveText((levelAsInt + 1).toString())
-        })
+            await expect(this.zoomLevel).toHaveText((levelAsInt + 1).toString());
+        });
     }
 
     async zoomOut() {
         await this.zoomLevel.textContent().then(async (val) => {
             const levelAsInt = parseInt(val!);
             await this.zoomOutBtn.click();
-            await expect(this.zoomLevel).toHaveText((levelAsInt - 1).toString())
-        })
+            await expect(this.zoomLevel).toHaveText((levelAsInt - 1).toString());
+        });
     }
 
     /**
@@ -83,7 +83,7 @@ class MapPageAssertions {
     /** Asserts that the title of the section in the sidebar is the expected one
      * @param {string} title The expected title
      */
-    async paragraphTextContains({ paragraphIndex, text }: { paragraphIndex: number, text: string }) {
+    async paragraphTextContains({ paragraphIndex, text }: { paragraphIndex: number; text: string }) {
         await expect(this.mapPage.sidebar.textParagraphs.nth(paragraphIndex - 1)).toContainText(text);
     }
 
@@ -93,9 +93,11 @@ class MapPageAssertions {
         // TODO: What if some of the types doesn't have entries, should it be displayed in the widget?
         for (const el of [widget.preSchoolType, widget.fireStationType, widget.policeStationType]) {
             await expect(el).toBeVisible();
-            el.locator('span:not(class)').textContent().then((val) => {
-                expect(parseInt(val!)).toBeGreaterThan(1);
-            })
+            el.locator('span:not(class)')
+                .textContent()
+                .then((val) => {
+                    expect(parseInt(val!)).toBeGreaterThan(1);
+                });
         }
     }
 

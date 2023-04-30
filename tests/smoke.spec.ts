@@ -1,4 +1,4 @@
-import { test } from "./fixture-test";
+import { test } from './fixture-test';
 
 test.describe('Smoke', () => {
     // Increasing the global test timeout due to the map loading slowly
@@ -8,17 +8,15 @@ test.describe('Smoke', () => {
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
         await appUI.mapPage.assertThat.mapIsVisible();
         await appUI.mapPage.assertThat.titleSectionIsCorrect('Introduction');
-        for (
-            const p of [
-                { index: 1, text: 'The State Highway System provides mobility for over 1.4 million Hawai' },
-                { index: 2, text: 'The segments of the State Highway System that experience the highest' },
-                { index: 3, text: 'Various climate hazards can impact this system by rendering infrastructure' },
-            ]
-        ) {
+        for (const p of [
+            { index: 1, text: 'The State Highway System provides mobility for over 1.4 million Hawai' },
+            { index: 2, text: 'The segments of the State Highway System that experience the highest' },
+            { index: 3, text: 'Various climate hazards can impact this system by rendering infrastructure' },
+        ]) {
             await appUI.mapPage.assertThat.paragraphTextContains({ paragraphIndex: p.index, text: p.text });
         }
         await appUI.mapPage.assertThat.hdotAssetsByTypeWidgetIsVisible();
-    })
+    });
 
     test('Should be able to toggle Facilities and Structure layer', async ({ appUI }) => {
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
@@ -29,7 +27,7 @@ test.describe('Smoke', () => {
         await appUI.mapPage.sidebar.goToInsightsTab();
         await appUI.mapPage.assertThat.facilitiesAndStructuresWidgetIsVisibleWithValues();
         await appUI.mapPage.sidebar.facilitiesAndStructuresWidget.selectPreSchoolType();
-    })
+    });
 
     test('Should be able to navigate to each section on the Home page', async ({ appUI }) => {
         await appUI.homePage.assertThat.allNavBarItemsAreVisible();
@@ -54,10 +52,9 @@ test.describe('Smoke', () => {
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
         await appUI.mapPage.sidebar.clickLogo();
         await appUI.homePage.assertThat.allNavBarItemsAreVisible();
-    
+
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
         await appUI.mapPage.zoomIn();
         await appUI.mapPage.zoomOut();
-    })
-
+    });
 });

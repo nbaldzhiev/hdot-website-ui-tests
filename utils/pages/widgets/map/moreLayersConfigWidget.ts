@@ -1,7 +1,7 @@
-/** 
- * This module contains an abstraction of the More Layers widget present on the map page 
+/**
+ * This module contains an abstraction of the More Layers widget present on the map page
  */
-import { Page, Locator, expect } from "@playwright/test";
+import { Page, Locator, expect } from '@playwright/test';
 
 export class MoreLayersConfig {
     readonly page: Page;
@@ -14,7 +14,7 @@ export class MoreLayersConfig {
         this.btn = page.getByText('More Layers');
         this.popup = page.locator('.MuiPopover-paper');
         this.facilitiesAndStructuresToggle = this.popup.locator(
-            '.MuiGrid-direction-xs-column + div > div:first-child > li:first-child span.MuiIconButton-root'
+            '.MuiGrid-direction-xs-column + div > div:first-child > li:first-child span.MuiIconButton-root',
         );
     }
 
@@ -27,7 +27,7 @@ export class MoreLayersConfig {
             if (!state) {
                 await this.btn.click();
             }
-        })
+        });
         await expect(this.facilitiesAndStructuresToggle).toBeVisible();
     }
 
@@ -35,17 +35,16 @@ export class MoreLayersConfig {
      * Toggles the Facilities and Structures option of the menu
      * @param {boolean} on Whether to toggle on or off the option
      */
-    async toggleFacilitiesAndStructures(on: boolean = true) {
+    async toggleFacilitiesAndStructures(on = true) {
         await this.expand();
         const classVal = await this.facilitiesAndStructuresToggle.getAttribute('class');
         if (on && !classVal?.includes('Mui-checked')) {
             await this.facilitiesAndStructuresToggle.click();
-            await expect(this.facilitiesAndStructuresToggle).toHaveClass(/Mui-checked/)
+            await expect(this.facilitiesAndStructuresToggle).toHaveClass(/Mui-checked/);
         } else if (!on && classVal?.includes('Mui-checked')) {
             await this.facilitiesAndStructuresToggle.click();
-            await expect(this.facilitiesAndStructuresToggle).not.toHaveClass(/Mui-checked/)
+            await expect(this.facilitiesAndStructuresToggle).not.toHaveClass(/Mui-checked/);
         }
         await this.page.waitForLoadState('networkidle');
     }
-
 }
