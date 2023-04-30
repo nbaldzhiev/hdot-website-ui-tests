@@ -17,7 +17,7 @@ jobs:
                   node-version: 16
             - run: npm ci
             - name: Install Playwright Browsers - Chromium, Firefox, Webkit 
-              run: npx playwright install chromium webkit firefox
+              run: npx playwright install --with-deps chromium webkit firefox
             - name: Run Playwright tests
               run: npx playwright test
             - name: Upload Playwright HTML Report as artifact
