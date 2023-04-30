@@ -19,18 +19,11 @@ export class HDOTAssetsByTypeWidget {
         this.roadwayType = page.locator(`${selector}:nth-child(2)`);
         this.culvertType = page.locator(`${selector}:nth-child(3)`);
         this.tunnelType = page.locator(`${selector}:last-child`);
-        this.loader = page.locator('.MuiSkeleton-wave');
     }
 
-    async waitUntilTypesHaveLoaded(timeout = 30000) {
-        for (const el of await this.loader.all()) {
-            await expect(el).toBeVisible();
-        }
-        for (const el of await this.loader.all()) {
-            await expect(el).toBeHidden({ timeout: timeout });
-        }
+    async waitUntilTypesHaveLoaded() {
         for (const el of [this.bridgeType, this.roadwayType, this.culvertType, this.tunnelType]) {
-            await el.locator('span').textContent().then((val) => {
+            await el.locator('span:not([class*="MuiSkeleton-wave"])').textContent().then((val) => {
                 expect(parseInt(val!)).toBeGreaterThan(1);
             })
         }
