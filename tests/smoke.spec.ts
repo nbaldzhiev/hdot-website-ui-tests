@@ -2,7 +2,7 @@ import { test, expect } from './fixture-test';
 
 test.describe('Smoke', () => {
     // Increasing the global test timeout due to the map loading slowly
-    test.setTimeout(220000);
+    test.setTimeout(120000);
 
     test('Should be able to open the Map page from the Home page', async ({ appUI }) => {
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
