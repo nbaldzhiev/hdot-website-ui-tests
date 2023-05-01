@@ -23,7 +23,8 @@ export class HDOTAssetsByTypeWidget {
 
     async waitUntilTypesHaveLoaded() {
         for (const el of [this.bridgeType, this.roadwayType, this.culvertType, this.tunnelType]) {
-            await expect(el.locator('span:not([class*="MuiSkeleton-wave"])')).toBeVisible({ timeout: 90000 });
+            await el.locator('span').scrollIntoViewIfNeeded();
+            await expect(el.locator('span:not([class*="MuiSkeleton-wave"])')).toBeVisible({ timeout: 30000 });
             await el.locator('span:not([class*="MuiSkeleton-wave"])').textContent().then((val) => {
                 expect(parseInt(val!)).toBeGreaterThan(1);
             })
