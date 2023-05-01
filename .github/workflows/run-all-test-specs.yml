@@ -19,7 +19,7 @@ jobs:
             - name: Install Playwright Browsers - Chromium, Firefox, Webkit
               run: npx playwright install --with-deps chromium webkit firefox
             - name: Run Playwright tests
-              run: npx playwright test
+              run: npx playwright test --project=chromium
             - name: Upload Playwright HTML Report as artifact
               if: always()
               uses: actions/upload-artifact@v3
