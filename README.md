@@ -24,7 +24,7 @@ After installing, run
 
 ### GitHub Actions (CI)
 
-* [run-all-tests.yml](https://github.com/nbaldzhiev/playwright-ts-orange-hrm/blob/main/.github/workflows/run-all-test-specs.yml) - Runs all test specs upon manual trigger (`workflow_dispatch`);
+-   [run-all-tests.yml](https://github.com/nbaldzhiev/playwright-ts-orange-hrm/blob/main/.github/workflows/run-all-test-specs.yml) - Runs all test specs upon manual trigger (`workflow_dispatch`);
 
 The Playwright HTML report is uploaded as a workflow artifact.
 

@@ -21,16 +21,19 @@ export class HDOTAssetsByTypeWidget {
         this.tunnelType = page.locator(`${selector}:last-child`);
     }
 
-    /** 
-     * Waits untill all type items in the widget have loaded. This method can be used as a way to verify that the 
+    /**
+     * Waits untill all type items in the widget have loaded. This method can be used as a way to verify that the
      * map has loaded as the widget's items load once the map has finished loading.
      */
     async waitUntilTypesHaveLoaded() {
         for (const el of [this.bridgeType, this.roadwayType, this.culvertType, this.tunnelType]) {
             await expect(el.locator('span:not([class*="MuiSkeleton-wave"])')).toBeVisible({ timeout: 30000 });
-            await el.locator('span:not([class*="MuiSkeleton-wave"])').textContent().then((val) => {
-                expect(parseInt(val!)).toBeGreaterThan(1);
-            })
+            await el
+                .locator('span:not([class*="MuiSkeleton-wave"])')
+                .textContent()
+                .then((val) => {
+                    expect(parseInt(val!)).toBeGreaterThan(1);
+                });
         }
     }
 }

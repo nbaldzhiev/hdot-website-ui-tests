@@ -3,7 +3,9 @@
     "version": "1.0.0",
     "description": "UI Tests for the HDOT website",
     "main": "index.js",
-    "scripts": {},
+    "scripts": {
+        "lint": "npx eslint . && npx prettier --write ."
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/nbaldzhiev/hdot-website-ui-tests.git"
