@@ -1,4 +1,4 @@
-import { test, expect } from './fixture-test';
+import { test } from './fixture-test';
 
 test.describe('Smoke', () => {
     // Increasing the global test timeout due to the map loading slowly

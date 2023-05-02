@@ -54,10 +54,10 @@ export class MapPage {
         let finishedLoading = false;
         let nothingLoaded = false;
         for (let i = 0; i < loadTimeout * 2; i++) {
-            const requestPromise = this.page.waitForRequest(/\/maps\/hdot-public-app\/tileset\//, {
-                timeout: requestTimeout * 1000,
-            });
-            const request = await requestPromise
+            await this.page
+                .waitForRequest(/\/maps\/hdot-public-app\/tileset\//, {
+                    timeout: requestTimeout * 1000,
+                })
                 .then(() => numOfRequests++)
                 .catch(() => {
                     if (numOfRequests) {
