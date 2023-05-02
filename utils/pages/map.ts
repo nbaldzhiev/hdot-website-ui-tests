@@ -43,6 +43,40 @@ export class MapPage {
     }
 
     /**
+     * Waits for the map to load by waiting until no more API requests for /maps/hdot-public-app/tileset/ are made,
+     * which happens when the map has finished loading all its data.
+     * @param {number} loadTimeout The total timeout to wait for requests to stop coming in. In seconds. Defaults to 30.
+     * @param {number} requestTimeout The total timeout for waiting for a single request. If this timeout is reached,
+     * then a request didn't arrive after this amount of time. In seconds. Defaults to 10.
+     */
+    async waitUntilMapHasLoaded(loadTimeout = 30, requestTimeout = 10) {
+        let numOfRequests = 0;
+        let finishedLoading = false;
+        let nothingLoaded = false;
+        for (let i = 0; i < loadTimeout * 2; i++) {
+            const requestPromise = this.page.waitForRequest(/\/maps\/hdot-public-app\/tileset\//, {
+                timeout: requestTimeout * 1000,
+            });
+            const request = await requestPromise
+                .then(() => numOfRequests++)
+                .catch(() => {
+                    if (numOfRequests) {
+                        // If waitForRequest timed out, but there were requests already, i.e. requests have stopped and
+                        // map has *probably* loaded
+                        finishedLoading = true;
+                    } else if (!numOfRequests) {
+                        // If waitForRequest timed out before any request is received, i.e. map didn't load at all
+                        nothingLoaded = true;
+                    }
+                });
+            if (finishedLoading || nothingLoaded) break;
+            await this.page.waitForTimeout(500);
+        }
+        expect(nothingLoaded).toBeFalsy();
+        expect(finishedLoading).toBeTruthy();
+    }
+
+    /**
      * Returns a MapPageAssertions object as an interface to invoking assertions on the page
      * @returns {MapPageAssertions}
      */
@@ -82,8 +116,8 @@ class MapPageAssertions {
         const widget = this.mapPage.sidebar.facilitiesAndStructuresWidget;
         // TODO: What if some of the types doesn't have entries, should it be displayed in the widget?
         for (const el of [widget.preSchoolType, widget.fireStationType, widget.policeStationType]) {
-            await expect(el).toBeVisible();
-            el.locator('span:not(class)')
+            await el
+                .locator('span:not([class])')
                 .textContent()
                 .then((val) => {
                     expect(parseInt(val!)).toBeGreaterThan(1);

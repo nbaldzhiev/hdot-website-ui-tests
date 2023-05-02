@@ -29,6 +29,10 @@ export class HDOTAssetsConfig {
             }
         });
         await expect(this.unselectAllBtn).toBeVisible();
+        // Wait untill all toggles are enabled as a way to know that the popup has fully loaded
+        await expect(this.popup.locator('span.MuiIconButton-root[aria-disabled="true"]')).toHaveCount(0, {
+            timeout: 30000,
+        });
     }
 
     /** Clicks on the Unselect All button in the expanded menu */

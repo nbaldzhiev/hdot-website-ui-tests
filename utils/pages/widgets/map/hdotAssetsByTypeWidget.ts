@@ -5,6 +5,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 
 export class HDOTAssetsByTypeWidget {
+    readonly page: Page;
     readonly title: Locator;
     readonly bridgeType: Locator;
     readonly roadwayType: Locator;
@@ -13,6 +14,7 @@ export class HDOTAssetsByTypeWidget {
     readonly loader: Locator;
 
     constructor(page: Page) {
+        this.page = page;
         const selector = '[aria-label="HDOT Assets by Type"] div.MuiGrid-item > div.MuiGrid-spacing-xs-1';
         this.title = page.locator('h6[title="HDOT Assets by Type"]');
         this.bridgeType = page.locator(`${selector}:first-child`);
@@ -22,8 +24,7 @@ export class HDOTAssetsByTypeWidget {
     }
 
     /**
-     * Waits untill all type items in the widget have loaded. This method can be used as a way to verify that the
-     * map has loaded as the widget's items load once the map has finished loading.
+     * Waits untill all type items in the widget have loaded.
      */
     async waitUntilTypesHaveLoaded() {
         for (const el of [this.bridgeType, this.roadwayType, this.culvertType, this.tunnelType]) {

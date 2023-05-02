@@ -2,11 +2,13 @@ import { test, expect } from './fixture-test';
 
 test.describe('Smoke', () => {
     // Increasing the global test timeout due to the map loading slowly
-    test.setTimeout(120000);
+    test.setTimeout(180000);
 
     test('Should be able to open the Map page from the Home page', async ({ appUI }) => {
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
         await appUI.mapPage.assertThat.mapIsVisible();
+        await appUI.mapPage.waitUntilMapHasLoaded();
+        await appUI.mapPage.sidebar.hdotAssetsByTypeWidget.waitUntilTypesHaveLoaded();
         await appUI.mapPage.assertThat.titleSectionIsCorrect('Introduction');
         for (const p of [
             { index: 1, text: 'The State Highway System provides mobility for over 1.4 million Hawai' },
@@ -15,14 +17,14 @@ test.describe('Smoke', () => {
         ]) {
             await appUI.mapPage.assertThat.paragraphTextContains({ paragraphIndex: p.index, text: p.text });
         }
-        await appUI.mapPage.sidebar.hdotAssetsByTypeWidget.waitUntilTypesHaveLoaded();
     });
 
     test('Should be able to toggle Facilities and Structure layer', async ({ appUI }) => {
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
         await appUI.mapPage.assertThat.mapIsVisible();
-        await appUI.mapPage.assertThat.titleSectionIsCorrect('Introduction');
+        await appUI.mapPage.waitUntilMapHasLoaded();
         await appUI.mapPage.sidebar.hdotAssetsByTypeWidget.waitUntilTypesHaveLoaded();
+        await appUI.mapPage.assertThat.titleSectionIsCorrect('Introduction');
         await appUI.mapPage.moreLayersConfig.toggleFacilitiesAndStructures();
         await appUI.mapPage.hdotAssetsConfig.unselectAll();
         await appUI.mapPage.sidebar.categoriesVerticalBar.openThematicIndices();
