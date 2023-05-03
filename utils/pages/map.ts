@@ -11,6 +11,8 @@ export class MapPage {
     readonly sidebar: MapPageSideBar;
     readonly moreLayersConfig: MoreLayersConfig;
     readonly hdotAssetsConfig: HDOTAssetsConfig;
+    readonly hazardsBtn: Locator;
+    readonly thematicIndicesBtn: Locator;
     readonly zoomOutBtn: Locator;
     readonly zoomInBtn: Locator;
     readonly zoomLevel: Locator;
@@ -21,6 +23,10 @@ export class MapPage {
         this.sidebar = new MapPageSideBar(page);
         this.moreLayersConfig = new MoreLayersConfig(page);
         this.hdotAssetsConfig = new HDOTAssetsConfig(page);
+        this.hazardsBtn = page.locator('button[aria-controls="simple-menu"] span', { hasText: 'Hazards' });
+        this.thematicIndicesBtn = page.locator('button[aria-controls="simple-menu"] span', {
+            hasText: 'Thematic Indices',
+        });
         this.zoomOutBtn = page.locator('button[aria-label="Decrease zoom"]');
         this.zoomInBtn = page.locator('button[aria-label="Increase zoom"]');
         this.zoomLevel = page.locator('.MuiBox-root .MuiTypography-displayBlock');
@@ -77,6 +83,19 @@ export class MapPage {
     }
 
     /**
+     * Modifies the response of the /dataset/datasets.json GET request by deleting one of the dataset properties.
+     * @param datasetName The dataset whose property to delete - 'assets' | 'hazards' | 'index' | 'others'
+     */
+    async modifyDatasetsResponse(datasetName: string) {
+        await this.page.route('**/data/datasets.json', async (route) => {
+            const response = await route.fetch();
+            const body = await response.json();
+            delete body['commons'][datasetName];
+            route.fulfill({ json: body });
+        });
+    }
+
+    /**
      * Returns a MapPageAssertions object as an interface to invoking assertions on the page
      * @returns {MapPageAssertions}
      */
@@ -102,6 +121,58 @@ class MapPageAssertions {
      */
     async titleSectionIsCorrect(title: string) {
         await expect(this.mapPage.sidebar.title).toHaveText(title);
+    }
+
+    /**
+     * Asserts that the HDOT Assets button is visible or not
+     * @param negate Whether or not to negate the statement, i.e. true would mean to assert button is not
+     * visible
+     */
+    async hdotAssetsBtnIsVisible(negate = false) {
+        if (!negate) {
+            await expect(this.mapPage.hdotAssetsConfig.btn).toBeVisible();
+        } else {
+            await expect(this.mapPage.hdotAssetsConfig.btn).toBeHidden();
+        }
+    }
+
+    /**
+     * Asserts that the Hazards button is visible or not
+     * @param negate Whether or not to negate the statement, i.e. true would mean to assert button is not
+     * visible
+     */
+    async hazardsBtnIsVisible(negate = false) {
+        if (!negate) {
+            await expect(this.mapPage.hazardsBtn).toBeVisible();
+        } else {
+            await expect(this.mapPage.hazardsBtn).toBeHidden();
+        }
+    }
+
+    /**
+     * Asserts that the Thematic Indices button is visible or not
+     * @param negate Whether or not to negate the statement, i.e. true would mean to assert button is not
+     * visible
+     */
+    async thematicIndicesBtnIsVisible(negate = false) {
+        if (!negate) {
+            await expect(this.mapPage.thematicIndicesBtn).toBeVisible();
+        } else {
+            await expect(this.mapPage.thematicIndicesBtn).toBeHidden();
+        }
+    }
+
+    /**
+     * Asserts that the More Layers button is visible or not
+     * @param negate Whether or not to negate the statement, i.e. true would mean to assert button is not
+     * visible
+     */
+    async moreLayersBtnIsVisible(negate = false) {
+        if (!negate) {
+            await expect(this.mapPage.moreLayersConfig.btn).toBeVisible();
+        } else {
+            await expect(this.mapPage.moreLayersConfig.btn).toBeHidden();
+        }
     }
 
     /** Asserts that the title of the section in the sidebar is the expected one

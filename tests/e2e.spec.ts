@@ -19,6 +19,35 @@ test.describe('Smoke', () => {
         }
     });
 
+    ['assets', 'hazards', 'index', 'others'].forEach((datasetName) => {
+        test(`Should be able to see the map without the ${datasetName} dataset`, async ({ appUI }) => {
+            await appUI.mapPage.modifyDatasetsResponse(datasetName);
+            await appUI.homePage.openMapViaTopSectionExploreMapBtn();
+            await appUI.mapPage.assertThat.titleSectionIsCorrect('Introduction');
+            if (datasetName === 'assets') {
+                await appUI.mapPage.assertThat.hdotAssetsBtnIsVisible(true);
+                await appUI.mapPage.assertThat.hazardsBtnIsVisible();
+                await appUI.mapPage.assertThat.thematicIndicesBtnIsVisible();
+                await appUI.mapPage.assertThat.moreLayersBtnIsVisible();
+            } else if (datasetName === 'hazards') {
+                await appUI.mapPage.assertThat.hdotAssetsBtnIsVisible();
+                await appUI.mapPage.assertThat.hazardsBtnIsVisible(true);
+                await appUI.mapPage.assertThat.thematicIndicesBtnIsVisible();
+                await appUI.mapPage.assertThat.moreLayersBtnIsVisible();
+            } else if (datasetName === 'index') {
+                await appUI.mapPage.assertThat.hdotAssetsBtnIsVisible();
+                await appUI.mapPage.assertThat.hazardsBtnIsVisible();
+                await appUI.mapPage.assertThat.thematicIndicesBtnIsVisible(true);
+                await appUI.mapPage.assertThat.moreLayersBtnIsVisible();
+            } else if (datasetName === 'others') {
+                await appUI.mapPage.assertThat.hdotAssetsBtnIsVisible();
+                await appUI.mapPage.assertThat.hazardsBtnIsVisible();
+                await appUI.mapPage.assertThat.thematicIndicesBtnIsVisible();
+                await appUI.mapPage.assertThat.moreLayersBtnIsVisible(true);
+            }
+        });
+    });
+
     test('Should be able to toggle Facilities and Structure layer', async ({ appUI }) => {
         await appUI.homePage.openMapViaTopSectionExploreMapBtn();
         await appUI.mapPage.assertThat.mapIsVisible();
