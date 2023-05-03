@@ -25,25 +25,21 @@ test.describe('Smoke', () => {
             await appUI.homePage.openMapViaTopSectionExploreMapBtn();
             await appUI.mapPage.assertThat.titleSectionIsCorrect('Introduction');
             if (datasetName === 'assets') {
-                await appUI.mapPage.assertThat.hdotAssetsBtnIsVisible(true);
-                await appUI.mapPage.assertThat.hazardsBtnIsVisible();
-                await appUI.mapPage.assertThat.thematicIndicesBtnIsVisible();
-                await appUI.mapPage.assertThat.moreLayersBtnIsVisible();
+                await appUI.mapPage.assertThat.datasetBtnsAreVisible({
+                    assets: false, hazards: true, indices: true, others: true
+                });
             } else if (datasetName === 'hazards') {
-                await appUI.mapPage.assertThat.hdotAssetsBtnIsVisible();
-                await appUI.mapPage.assertThat.hazardsBtnIsVisible(true);
-                await appUI.mapPage.assertThat.thematicIndicesBtnIsVisible();
-                await appUI.mapPage.assertThat.moreLayersBtnIsVisible();
+                await appUI.mapPage.assertThat.datasetBtnsAreVisible({
+                    assets: true, hazards: false, indices: true, others: true
+                });
             } else if (datasetName === 'index') {
-                await appUI.mapPage.assertThat.hdotAssetsBtnIsVisible();
-                await appUI.mapPage.assertThat.hazardsBtnIsVisible();
-                await appUI.mapPage.assertThat.thematicIndicesBtnIsVisible(true);
-                await appUI.mapPage.assertThat.moreLayersBtnIsVisible();
+                await appUI.mapPage.assertThat.datasetBtnsAreVisible({
+                    assets: true, hazards: true, indices: false, others: true
+                });
             } else if (datasetName === 'others') {
-                await appUI.mapPage.assertThat.hdotAssetsBtnIsVisible();
-                await appUI.mapPage.assertThat.hazardsBtnIsVisible();
-                await appUI.mapPage.assertThat.thematicIndicesBtnIsVisible();
-                await appUI.mapPage.assertThat.moreLayersBtnIsVisible(true);
+                await appUI.mapPage.assertThat.datasetBtnsAreVisible({
+                    assets: true, hazards: true, indices: true, others: false
+                });
             }
         });
     });

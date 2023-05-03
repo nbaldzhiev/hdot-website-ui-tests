@@ -175,6 +175,31 @@ class MapPageAssertions {
         }
     }
 
+    /**
+     * Asserts that the dataset buttons are visible or not.
+     * @param obj
+     * @param obj.assets Whether or not the HDOT Assets button is expected to be visible or not
+     * @param obj.hazards Whether or not the Hazards button is expected to be visible or not
+     * @param obj.indices Whether or not the Thematic Indices button is expected to be visible or not
+     * @param obj.others Whether or not the More Layers button is expected to be visible or not
+     */
+    async datasetBtnsAreVisible({
+        assets,
+        hazards,
+        indices,
+        others,
+    }: {
+        assets: boolean;
+        hazards: boolean;
+        indices: boolean;
+        others: boolean;
+    }) {
+        await this.hdotAssetsBtnIsVisible(!assets);
+        await this.hazardsBtnIsVisible(!hazards);
+        await this.thematicIndicesBtnIsVisible(!indices);
+        await this.moreLayersBtnIsVisible(!others);
+    }
+
     /** Asserts that the title of the section in the sidebar is the expected one
      * @param {string} title The expected title
      */
