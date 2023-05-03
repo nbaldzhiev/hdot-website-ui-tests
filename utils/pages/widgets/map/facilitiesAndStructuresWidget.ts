@@ -25,4 +25,19 @@ export class ThematicIndicesFacilitiesAndStructuresWidget {
         await this.preSchoolType.click();
         await expect(this.selectedMsg).toContainText('1 selected');
     }
+
+    async getPreSchoolValue(): Promise<number> {
+        const val = await this.preSchoolType.locator('span').textContent();
+        return parseInt(val!);
+    }
+
+    async getFireStationValue(): Promise<number> {
+        const val = await this.fireStationType.locator('span').textContent();
+        return parseInt(val!);
+    }
+
+    async getPoliceStationValue(): Promise<number> {
+        const val = await this.policeStationType.locator('span').textContent();
+        return parseInt(val!);
+    }
 }

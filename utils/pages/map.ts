@@ -16,6 +16,7 @@ export class MapPage {
     readonly zoomOutBtn: Locator;
     readonly zoomInBtn: Locator;
     readonly zoomLevel: Locator;
+    readonly objectHoverPopUpContent: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -30,6 +31,7 @@ export class MapPage {
         this.zoomOutBtn = page.locator('button[aria-label="Decrease zoom"]');
         this.zoomInBtn = page.locator('button[aria-label="Increase zoom"]');
         this.zoomLevel = page.locator('.MuiBox-root .MuiTypography-displayBlock');
+        this.objectHoverPopUpContent = page.locator('#deckgl-wrapper .content span');
     }
 
     async zoomIn() {
@@ -46,6 +48,26 @@ export class MapPage {
             await this.zoomOutBtn.click();
             await expect(this.zoomLevel).toHaveText((levelAsInt - 1).toString());
         });
+    }
+
+    /**
+     * Zooms in on the map by using double clicks based on X and Y coordinates of the page
+     * @param coordinates An array of objects containing properties 'x' and 'y', designating the coordinates to click
+     * on. An array so that the user can provide multiple zoom ins in one call.
+     */
+    async zoomInMapByCoordinates(coordinates: { x: number; y: number }[]) {
+        for (const coord of coordinates) {
+            await this.mapArea.dblclick({ force: true, position: { x: coord.x, y: coord.y } });
+        }
+    }
+
+    /**
+     * Hovers over a given object on the map designated by its X and Y coordinates on the page
+     * @param x The page X coordinate to hover at
+     * @param y The page Y coordinate to hover at
+     */
+    async hoverMapObjectByCoordinates(x: number, y: number) {
+        await this.mapArea.hover({ force: true, position: { x: x, y: y } });
     }
 
     /**
@@ -227,5 +249,15 @@ class MapPageAssertions {
      */
     async zoomLevelIsCorrect(zoomLevel: number) {
         await expect(this.mapPage.zoomLevel).toHaveText(zoomLevel.toString());
+    }
+
+    /**
+     * Asserts that the content of the popup available upon hovering on a map object is correct. This is not to be
+     * mistaken with the dialog which apppears when clicking on a map object
+     * @param content The expected content in the popup
+     */
+    async mapObjectHoverContentIsCorrect(content: string) {
+        await expect(this.mapPage.objectHoverPopUpContent).toBeVisible();
+        await expect(this.mapPage.objectHoverPopUpContent).toContainText(content);
     }
 }
